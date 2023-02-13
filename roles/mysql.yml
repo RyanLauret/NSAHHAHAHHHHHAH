@@ -1,0 +1,39 @@
+---
+- name: Install and configure MySQL
+  hosts: servers
+  become: true
+  become_method: su
+  vars_files:
+    - secrets.yml
+  vars: 
+    ansible_become_pass: '{{ root_password }}'
+    
+  tasks:
+  - name: Make sure pymysql is installed
+    pip:
+      name: pymysql
+      state: latest
+
+  - name: Install mariadb-server
+    apt:
+      name: mariadb-server
+      state: present
+
+  - name: Start mariadb-server
+    service:
+      name: mariadb
+      state: started
+      enabled: yes
+
+  # - name: create a user
+  #   mysql_user:
+  #    login_unix_socket: /var/run/mysqld/mysqld.sock
+  #    state: present
+  #    name: '{{ mysql_user }}'
+  #    password: '{{ mysql_password }}'
+  #    priv: '*.*:ALL,GRANT'
+
+  - name: Restart MySQL
+    service:
+      name: mariadb
+      state: restarted

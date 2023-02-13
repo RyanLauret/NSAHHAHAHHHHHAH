@@ -1,0 +1,91 @@
+---
+- name: Install PHP
+  hosts: servers
+  become: true
+  become_method: su
+  vars_files:
+    - secrets.yml
+  vars: 
+    ansible_become_pass: '{{ root_password }}'
+
+  tasks:
+  - name: Install php
+    package:
+     name: php
+     state: latest
+
+  - name: Install php-cli
+    package:
+     name: php-cli
+     state: latest
+
+  - name: Install php-fpm
+    package:
+     name: php-fpm
+     state: latest
+
+  - name: Install php-json
+    package:
+     name: php-json
+     state: latest
+
+  - name: Install php-pdo
+    package:
+     name: php-pdo
+     state: latest
+
+  - name: Install php-mysql
+    package:
+     name: php-mysql
+     state: latest
+     
+  - name: Install php-zip
+    package:
+     name: php-zip
+     state: latest     
+
+  - name: Install php-gd
+    package:
+     name: php-gd
+     state: latest  
+
+  - name: Install php-mbstring
+    package:
+     name: php-mbstring
+     state: latest
+ 
+  - name: Install php-curl
+    package:
+     name: php-curl
+     state: latest  
+
+  - name: Install php-xml
+    package:
+     name: php-xml
+     state: latest   
+
+  - name: Install php-pear
+    package:
+     name: php-pear
+     state: latest
+  
+  - name: Install php-bcmath
+    package:
+     name: php-bcmath
+     state: latest  
+  
+  - name: Install php-intl
+    package:
+     name: php-intl
+     state: latest
+
+  - name: set timezone
+    lineinfile:
+     dest: /etc/php/7.4/cli/php.ini
+     regexp: "date.timezone ="
+     line: 'date.timezone = "Europe/Paris"'
+
+  - name: Restart php
+    service: 
+     name: php7.4-fpm.service
+     state: restarted

@@ -1,0 +1,26 @@
+---
+- name: Install package
+  hosts: servers
+  become: true
+  become_method: su
+  vars_files:
+    - secrets.yml
+  vars: 
+    ansible_become_pass: '{{ root_password }}'
+
+  tasks:
+  - name: Install apache2
+    package:
+     name: apache2
+     state: latest
+
+  - name: Copy directory to apache2
+    copy:
+     src: ./app/
+     dest: /var/www/html/
+
+  - name: Start apache2
+    service:
+     name: apache2
+     state: started
+     enabled: yes

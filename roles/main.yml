@@ -1,0 +1,15 @@
+---
+- name: 1. Install base
+  import_playbook: base.yml
+
+- name: 2. Install php
+  import_playbook: php.yml
+
+- name: 3. Install apache
+  import_playbook: apache.yml
+
+- name: 4. Install mysql
+  import_playbook: mysql.yml
+
+- name: 5. Install composer
+  import_playbook: composer.yml
