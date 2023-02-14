@@ -1,0 +1,8 @@
+# deploy
+deploy:
+  stage: deploy 
+  image: ansible/ansible:latest
+  script:
+    - ansible-playbook -i hosts --vault-password-file $VAULT_PASS /roles/main.yml
+  only:
+    - master
