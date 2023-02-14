@@ -73,3 +73,14 @@
     package:
      name: python3-pip
      state: latest
+
+  - name: Install npm
+    package:
+     name: npm
+     state: latest
+  
+  - name: Update npm
+    shell: npm install n -g && n latest
+ 
+  - name: Install angular
+    shell: npm install @angular/cli@latest

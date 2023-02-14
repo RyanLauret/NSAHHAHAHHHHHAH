@@ -1,6 +1,7 @@
+
 ---
 - name: Install Composer and execute database migrations
-  hosts: servers
+  hosts: localhost
   become: true
   become_method: su
   vars_files:
@@ -16,17 +17,42 @@
       mode: 0755
     register: composer_setup
 
-  - name: Install Composer
-    shell: php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
-    when: composer_setup.changed
+  - name: Run the installer
+    shell: php /tmp/composer-setup.php
 
-  - name: Install dependencies
-    shell: composer install
-    args:
-      chdir: /var/www/html/back
-      executable: /usr/bin/php
+  - name: Copy composer.phar to App folder
+    copy:
+      src: /home/user/nsa/composer.phar
+      dest: /var/www/html/back/composer
+      remote_src: true
+
+  - name: Make execute composer
+    shell: chmod u+x /var/www/html/back/composer
+
+  - name: Privileges on folder
+    shell: chmod -R 777 /var/www/html/back/
+
+  - name: Update composer 
+    become: false
+    become_user: user
+    composer:
+      command: update
+      working_dir: /var/www/html/back/
+  
+  - name: Install composer to the project folder
+    become: false
+    become_user: user
+    composer:
+      command: install
+      working_dir: /var/www/html/back
 
   - name: Execute database migrations
     shell: php artisan migrate:fresh --seed
     args:
       chdir: /var/www/html/back
+
+  - name: Restart mysql
+    shell: systemctl restart mysql
+
+  - name: restart apache2 
+    shell: systemctl restart apache2

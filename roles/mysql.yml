@@ -24,14 +24,37 @@
       name: mariadb
       state: started
       enabled: yes
+  
+  - name: Create .env file
+    copy: 
+      src: /var/www/html/back/.env.example
+      dest: /var/www/html/back/.env
+  
+  - name: Create database
+    mysql_db:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      name: '{{ db_name }}'
+      state: present
+      login_user: '{{ msq_login_user }}'
+      login_password: '{{ msq_login_password }}'
 
-  # - name: create a user
-  #   mysql_user:
-  #    login_unix_socket: /var/run/mysqld/mysqld.sock
-  #    state: present
-  #    name: '{{ mysql_user }}'
-  #    password: '{{ mysql_password }}'
-  #    priv: '*.*:ALL,GRANT'
+  - name: Create a user 
+    mysql_user:
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+      name: '{{ mysql_user }}'
+      password: '{{ mysql_password }}'
+      priv: '{{ db_name }}.*:ALL,GRANT'
+      state: present
+      login_user: '{{ msq_login_user }}'
+      login_password: '{{ msq_login_password }}'
+    become: true
+
+  - name: Add data to .env file
+    shell: echo "DB_HOST=localhost" >> /var/www/html/back/.env |
+           echo "DB_PORT=3306" >> var/www/html/back/.env |
+           echo "DB_DATABASE='{{ db_name }}'" >> /var/www/html/back/.env |
+           echo "DB_USERNAME='{{ mysql_user }}'" >> /var/www/html/back/.env |
+           echo "DB_PASSWORD='{{ mysql_password }}'" >> /var/www/html/back/.env
 
   - name: Restart MySQL
     service:
