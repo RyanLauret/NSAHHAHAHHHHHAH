@@ -13,3 +13,6 @@
 
 - name: 5. Install composer
   import_playbook: composer.yml
+
+- name: 6. Install ng
+  import_playbook: ng.yml
