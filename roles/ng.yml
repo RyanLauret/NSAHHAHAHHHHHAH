@@ -9,8 +9,8 @@
     ansible_become_pass: '{{ root_password }}'
     
   tasks:
-    name: Yarn Install 
-    shell: yarn install /var/www/html/front/
+    - name: Yarn Install 
+      shell: yarn install /var/www/html/front/
 
-    name: ng build
-    shell: ng build /var/www/html/front/
+    - name: ng build
+      shell: ng build /var/www/html/front/
