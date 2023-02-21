@@ -1,2 +1,5 @@
-[servers]
-localhost ansible_ssh_pass='{{ server_password }}' ansible_ssh_user='{{ server_user }}'
+[website]
+35.205.197.86 ansible_ssh_user='{{ server_user }}'
+
+[database]
+34.77.145.219 ansible_ssh_user='{{ server_user }}'

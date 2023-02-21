@@ -1,6 +1,6 @@
 ---
 - name: Install package
-  hosts: servers
+  hosts: website, database
   become: true
   become_method: su
   vars_files:

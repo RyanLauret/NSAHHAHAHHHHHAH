@@ -1,6 +1,6 @@
 ---
 - name: Install PHP
-  hosts: servers
+  hosts: website
   become: true
   become_method: su
   vars_files:

@@ -1,6 +1,6 @@
 ---
 - name: Install and configure MySQL
-  hosts: servers
+  hosts: database
   become: true
   become_method: su
   vars_files:
